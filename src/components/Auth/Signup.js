@@ -1,9 +1,11 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import api from "../../api";
 
 const Signup = () => {
   const [formData, setFormData] = useState({email: "", password: "", password_confirmation:"" });
   const [error, seterror] = useState("");
+  const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -11,6 +13,7 @@ const Signup = () => {
       const response = await api.post("/signup", formData);
       localStorage.setItem("token", response.data.token);
       alert("Signup successful! Redirect to login or dashboard.")
+      navigate("/expenses");
     } catch (err) {
       seterror(err.response.data.errors.join(", "));
     }

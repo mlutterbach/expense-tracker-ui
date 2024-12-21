@@ -1,9 +1,11 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import api from "../../api";
 
 const Login = () => {
   const [formData, setFormData] = useState({email: "", password: "" });
   const [error, setError] = useState("");
+  const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -37,6 +39,12 @@ const Login = () => {
         />
         <button type="submit">Login</button>
       </form>
+      <p>
+        Don't have an account?{" "}
+        <button onClick={() => navigate("/signup")} style={{ color: "blue", background: "none", border: "none", cursor: "pointer" }}>
+          Register Here
+        </button>
+      </p>
     </div>
   );
 };

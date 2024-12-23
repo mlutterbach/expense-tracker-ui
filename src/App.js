@@ -2,8 +2,7 @@ import React from "react";
 import { Navigate, BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Login from "./components/Auth/Login";
 import Signup from "./components/Auth/Signup";
-import ExpenseForm from "./components/Expenses/ExpenseForm";
-import ExpenseList from "./components/Expenses/ExpenseList";
+import ExpenseManager from "./components/Expenses/ExpenseManager";
 import ProjectedRoute from "./components/ProjectedRoute";
 
 function App() {
@@ -17,8 +16,7 @@ function App() {
           element={
             <ProjectedRoute>
               <>
-                <ExpenseForm onExpenseAdded={() => {}} />
-                <ExpenseList />
+                <ExpenseManager />
               </>
             </ProjectedRoute>
           }

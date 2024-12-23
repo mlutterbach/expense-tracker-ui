@@ -1,9 +1,10 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import api from "../../api";
+import "../../styles/Auth.css";
 
 const Login = () => {
-  const [formData, setFormData] = useState({email: "", password: "" });
+  const [formData, setFormData] = useState({ email: "", password: "" });
   const [error, setError] = useState("");
   const navigate = useNavigate();
 
@@ -12,39 +13,41 @@ const Login = () => {
     try {
       const response = await api.post("/login", formData);
       localStorage.setItem("token", response.data.token);
-      alert("Login successful! Redirect to dashboard.")
+      alert("Login successful! Redirect to dashboard.");
     } catch (err) {
       setError("Invalid email or password");
     }
   };
 
   return (
-    <div>
-      <h2>Login</h2>
-      {error && <p style={{ color: "red" }}>{error}</p>}
-      <form onSubmit={handleSubmit}>
-        <input
-          type="email"
-          placeholder="Email"
-          value={formData.email}
-          onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-          required
-        />
-        <input
-          type="password"
-          placeholder="Password"
-          value={formData.password}
-          onChange={(e) => setFormData({ ...formData, password: e.target.value })}
-          required
-        />
-        <button type="submit">Login</button>
-      </form>
-      <p>
-        Don't have an account?{" "}
-        <button onClick={() => navigate("/signup")} style={{ color: "blue", background: "none", border: "none", cursor: "pointer" }}>
-          Register Here
-        </button>
-      </p>
+    <div className="auth-container">
+      <div className="auth-box">
+        <h2>Login</h2>
+        {error && <p style={{ color: "red" }}>{error}</p>}
+        <form onSubmit={handleSubmit}>
+          <input
+            type="email"
+            placeholder="Email"
+            value={formData.email}
+            onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+            required
+          />
+          <input
+            type="password"
+            placeholder="Password"
+            value={formData.password}
+            onChange={(e) =>
+              setFormData({ ...formData, password: e.target.value })
+            }
+            required
+          />
+          <button type="submit">Login</button>
+        </form>
+        <p>
+          Don't have an account?{" "}
+          <button onClick={() => navigate("/signup")}>Register Here</button>
+        </p>
+      </div>
     </div>
   );
 };

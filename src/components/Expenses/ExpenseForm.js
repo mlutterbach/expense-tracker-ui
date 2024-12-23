@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import api from "../../api";
+import "../../styles/ExpenseManager.css";
 
 const ExpenseForm = ({ onExpenseAdded }) => {
   const [formData, setFormData] = useState({
@@ -14,7 +15,7 @@ const ExpenseForm = ({ onExpenseAdded }) => {
     try {
       await api.post("/expenses", formData);
       alert("Expense added!");
-      setFormData({ amount: "", category: "", description: "", date: "" })
+      setFormData({ amount: "", category: "", description: "", date: "" });
       onExpenseAdded();
     } catch (err) {
       alert("Error adding expense");
@@ -22,17 +23,21 @@ const ExpenseForm = ({ onExpenseAdded }) => {
   };
 
   return (
-    <form onSubmit={handleSubmit}>
+    <form className="expense-form" onSubmit={handleSubmit}>
       <input
         type="number"
         placeholder="Amount"
         value={formData.amount}
-        onChange={(e) => setFormData({...formData, amount: e.target.value })}
+        onChange={(e) =>
+          setFormData({ ...formData, amount: e.target.value })
+        }
         required
       />
       <select
         value={formData.category}
-        onChange={(e) => setFormData({...formData, category: e.target.value })}
+        onChange={(e) =>
+          setFormData({ ...formData, category: e.target.value })
+        }
         required
       >
         <option value="">Select Category</option>
@@ -47,13 +52,17 @@ const ExpenseForm = ({ onExpenseAdded }) => {
       <input
         type="date"
         value={formData.date}
-        onChange={(e) => setFormData({ ...formData, date: e.target.value })}
+        onChange={(e) =>
+          setFormData({ ...formData, date: e.target.value })
+        }
         required
       />
       <textarea
         placeholder="Description"
         value={formData.description}
-        onChange={(e) => setFormData({ ...formData, description: e.target.value })}
+        onChange={(e) =>
+          setFormData({ ...formData, description: e.target.value })
+        }
       ></textarea>
       <button type="submit">Add Expense</button>
     </form>

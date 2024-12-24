@@ -114,13 +114,17 @@ const ExpenseFilter = ({ onFilterChange }) => {
                 type="number"
                 placeholder="Min"
                 value={amountRange.min}
-                onChange={(e) => setAmountRange({ ...amountRange, min: e.target.value })}
+                onChange={(e) =>
+                  setAmountRange({ ...amountRange, min: e.target.value })
+                }
               />
               <input
                 type="number"
                 placeholder="Max"
                 value={amountRange.max}
-                onChange={(e) => setAmountRange({ ...amountRange, max: e.target.value })}
+                onChange={(e) =>
+                  setAmountRange({ ...amountRange, max: e.target.value })
+                }
               />
             </div>
 

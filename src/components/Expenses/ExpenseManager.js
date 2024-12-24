@@ -7,11 +7,7 @@ import "../../styles/ExpenseManager.css";
 
 const ExpenseManager = () => {
   const [expenses, setExpenses] = useState([]);
-  const [filters, setFilters] = useState({
-    category: "",
-    amountRange: "",
-    dateRange: "",
-  });
+  const [filters, setFilters] = useState({});
 
   const fetchExpenses = async (filters = {}) => {
     try {
@@ -27,25 +23,13 @@ const ExpenseManager = () => {
   }, [filters]);
 
   const handleFilterChange = (newFilter) => {
-    setFilters((prevFilters) => ({
-      ...prevFilters,
-      ...newFilter,
-    }));
-  };
-
-  const clearFilters = () => {
-    setFilters({
-      category: "",
-      amountRange: "",
-      dateRange: "",
-    });
-    fetchExpenses();
+    setFilters(newFilter);
   };
 
   return (
     <div className="expense-manager">
       <h1>Expense Tracker</h1>
-      <ExpenseFilter onFilterChange={handleFilterChange} clearFilters={clearFilters} />
+      <ExpenseFilter onFilterChange={handleFilterChange} />
       <ExpenseForm onExpenseAdded={fetchExpenses} />
       <ExpenseList expenses={expenses} />
     </div>

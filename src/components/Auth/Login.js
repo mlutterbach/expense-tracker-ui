@@ -11,7 +11,7 @@ const Login = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await api.post("/login", formData);
+      const response = await api.post("/signin", formData);
       localStorage.setItem("token", response.data.token);
       alert("Login successful! Redirect to dashboard.");
     } catch (err) {

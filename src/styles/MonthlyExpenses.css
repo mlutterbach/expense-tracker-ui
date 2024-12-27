@@ -1,0 +1,70 @@
+/* General container styling */
+.monthly-expenses {
+  margin: 2rem auto;
+  padding: 1rem;
+  max-width: 600px;
+  background: #f9f9f9;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  font-family: Arial, sans-serif;
+}
+
+.monthly-expenses h2 {
+  text-align: center;
+  color: #333;
+}
+
+.monthly-expenses ul {
+  list-style: none;
+  padding: 0;
+}
+
+.monthly-expenses li {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.5rem 1rem;
+  margin: 0.5rem 0;
+  border-radius: 5px;
+  color: #fff;
+}
+
+/* Category colors */
+.monthly-expenses li.Groceries {
+  background: #4caf50;
+}
+
+.monthly-expenses li.Leisure {
+  background: #ff9800;
+}
+
+.monthly-expenses li.Electronics {
+  background: #2196f3;
+}
+
+.monthly-expenses li.Utilities {
+  background: #9c27b0;
+}
+
+.monthly-expenses li.Clothing {
+  background: #e91e63;
+}
+
+.monthly-expenses li.Health {
+  background: #f44336;
+}
+
+.monthly-expenses li.Others {
+  background: #607d8b;
+}
+
+/* Month container styling */
+.month-container {
+  margin-bottom: 1.5rem;
+}
+
+.month-container h3 {
+  text-align: left;
+  color: #444;
+  margin-bottom: 0.5rem;
+}

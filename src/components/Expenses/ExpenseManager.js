@@ -3,6 +3,7 @@ import api from "../../api";
 import ExpenseForm from "./ExpenseForm";
 import ExpenseList from "./ExpenseList";
 import ExpenseFilter from "./ExpenseFilter";
+import MonthlyExpenses from "./MonthlyExpenses";
 import "../../styles/ExpenseManager.css";
 
 const ExpenseManager = () => {
@@ -32,6 +33,7 @@ const ExpenseManager = () => {
       <ExpenseFilter onFilterChange={handleFilterChange} />
       <ExpenseForm onExpenseAdded={fetchExpenses} />
       <ExpenseList expenses={expenses} />
+      <MonthlyExpenses />
     </div>
   );
 };

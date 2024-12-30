@@ -1,49 +1,70 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import api from "../../api";
-import "../../styles/MonthlyExpenses.css"
+import "../../styles/MonthlyExpenses.css";
 
-const MonthlyExpenses = () => {
-  const [month, setMonth] = useState(new Date().toISOString().slice(0,7));
-  const [expensesByCategory, setExpensesByCategory] = useState([]);
+const MonthlyExpenses = ({ currentMonth, budgets = [] }) => {
+  const [expensesByCategory, setExpensesByCategory] = useState({});
 
-  const fetchMonthlyExpensesByCategory = async (selectedMonth) => {
+  const fetchMonthlyExpensesByCategory = useCallback(async () => {
     try {
       const response = await api.get("/expenses/monthly_by_category", {
-        params: { month: selectedMonth },
+        params: { month: currentMonth },
       });
-      setExpensesByCategory(response.data[selectedMonth] || {});
+      setExpensesByCategory(response.data[currentMonth] || {});
     } catch (err) {
       console.error("Error fetching monthly expenses by category", err);
     }
-  };
+  }, [currentMonth]);
 
   useEffect(() => {
-    fetchMonthlyExpensesByCategory(month);
-  }, [month]);
+    fetchMonthlyExpensesByCategory();
+  }, [fetchMonthlyExpensesByCategory]);
 
-  const handleMonthChange = (e) => {
-    setMonth(e.target.value);
+  const totalSpent = Object.values(expensesByCategory).reduce((sum, amount) => {
+    const numericAmount = parseFloat(amount) || 0;
+    return sum + numericAmount;
+  }, 0);
+
+  const totalBudget = (budgets || []).reduce((sum, budget) => {
+    const amount = parseFloat(budget.amount) || 0;
+    return sum + amount;
+  }, 0);
+
+  const getCategoryClass = (category) => {
+    const categoryClasses = {
+      Groceries: "groceries",
+      Leisure: "leisure",
+      Electronics: "electronics",
+      Utilities: "utilities",
+      Clothing: "clothing",
+      Health: "health",
+      Others: "others",
+    };
+    return categoryClasses[category] || "";
   };
 
   return (
     <div className="monthly-expenses">
-      <h2>Total Monthly Expenses by Category</h2>
-      <div className="month-selector">
-        <label htmlFor="month">Select Month: </label>
-        <input
-          type="month"
-          id="month"
-          value={month}
-          onChange={handleMonthChange}
-        />
+      <h2 className="monthly-expenses-title">Monthly Expenses Overview</h2>
+      <div className="budget-summary">
+        <p><strong>Total Budget:</strong> ${totalBudget > 0 ? totalBudget.toFixed(2) : "0.00"}</p>
+        <p><strong>Total Spent:</strong> ${totalSpent.toFixed(2)}</p>
+        <p>
+          <strong>Remaining:</strong> $
+          {totalBudget === 0 ? totalSpent.toFixed(2) : (totalBudget - totalSpent).toFixed(2)}
+        </p>
       </div>
-      <ul className="expense-list">
-        {Object.entries(expensesByCategory).map(([category, amount]) => (
-          <li key={category} className={category}>
-            {category}: ${amount.toFixed(2)}
-          </li>
-        ))}
-      </ul>
+      <div className="expenses-category">
+        <h3>Expenses by Category</h3>
+        <ul>
+          {Object.entries(expensesByCategory).map(([category, amount]) => (
+            <li key={category} className={getCategoryClass(category)}>
+              <span className="category-name">{category}</span>:
+              <span className="category-amount">${parseFloat(amount).toFixed(2)}</span>
+            </li>
+          ))}
+        </ul>
+      </div>
     </div>
   );
 };

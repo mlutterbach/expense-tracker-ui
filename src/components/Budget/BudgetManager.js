@@ -4,8 +4,9 @@ import "../../styles/BudgetManager.css";
 
 const BudgetManager = ({ currentMonth, onBudgetsUpdated }) => {
   const [budgets, setBudgets] = useState([]);
-  const [newBudget, setNewBudget] = useState({ category: "", amount: "" });
+  const [newBudget, setNewBudget] = useState({ amount: "" });
   const [isAdding, setIsAdding] = useState(false);
+  const [editingBudgetId, setEditingBudgetId] = useState(null);
 
   const fetchBudgets = useCallback(async () => {
     try {
@@ -21,7 +22,7 @@ const BudgetManager = ({ currentMonth, onBudgetsUpdated }) => {
     try {
       const response = await api.post("/budgets", { ...newBudget, month: currentMonth });
       setBudgets([response.data]); // Assume only one budget per month
-      setNewBudget({ category: "", amount: "" });
+      setNewBudget({ amount: "" });
       setIsAdding(false);
       if (onBudgetsUpdated) onBudgetsUpdated();
     } catch (err) {
@@ -29,10 +30,13 @@ const BudgetManager = ({ currentMonth, onBudgetsUpdated }) => {
     }
   };
 
-  const handleEditBudget = async (id, updatedBudget) => {
+  const handleEditBudget = async () => {
     try {
-      const response = await api.put(`/budgets/${id}`, updatedBudget);
-      setBudgets([response.data]); // Update with the edited budget
+      const response = await api.put(`/budgets/${editingBudgetId}`, { amount: newBudget.amount });
+      setBudgets([response.data]);
+      setEditingBudgetId(null);
+      setNewBudget({ amount: "" });
+      if (onBudgetsUpdated) onBudgetsUpdated();
     } catch (err) {
       console.error("Error updating budget", err);
     }
@@ -42,11 +46,16 @@ const BudgetManager = ({ currentMonth, onBudgetsUpdated }) => {
     try {
       await api.delete(`/budgets/${id}`);
       setBudgets([]);
-      setIsAdding(false); // Allow the user to add a new budget after deletion
+      setIsAdding(false);
       if (onBudgetsUpdated) onBudgetsUpdated();
     } catch (err) {
       console.error("Error deleting budget", err);
     }
+  };
+
+  const handleStartEditing = (budget) => {
+    setEditingBudgetId(budget.id);
+    setNewBudget({ amount: budget.amount });
   };
 
   useEffect(() => {
@@ -57,27 +66,29 @@ const BudgetManager = ({ currentMonth, onBudgetsUpdated }) => {
     <div className="budget-manager">
       <h2>Manage Monthly Budgets</h2>
 
-      {budgets.length === 0 && !isAdding ? (
+      {budgets.length === 0 && !isAdding && editingBudgetId === null ? (
         <div className="no-budget">
           <p>Would you like to add a budget for this month?</p>
           <button onClick={() => setIsAdding(true)}>Add a Budget</button>
         </div>
-      ) : isAdding ? (
+      ) : isAdding || editingBudgetId !== null ? (
         <div className="add-budget">
-          <input
-            type="text"
-            placeholder="Category"
-            value={newBudget.category}
-            onChange={(e) => setNewBudget({ ...newBudget, category: e.target.value })}
-          />
           <input
             type="number"
             placeholder="Amount"
             value={newBudget.amount}
             onChange={(e) => setNewBudget({ ...newBudget, amount: parseFloat(e.target.value) || "" })}
           />
-          <button onClick={handleAddBudget}>Save Budget</button>
-          <button onClick={() => setIsAdding(false)}>Cancel</button>
+          <button onClick={editingBudgetId ? handleEditBudget : handleAddBudget}>
+            {editingBudgetId ? "Update Budget" : "Save Budget"}
+          </button>
+          <button onClick={() => {
+            setIsAdding(false);
+            setEditingBudgetId(null);
+            setNewBudget({ amount: "" });
+          }}>
+            Cancel
+          </button>
         </div>
       ) : (
         <ul>
@@ -86,7 +97,7 @@ const BudgetManager = ({ currentMonth, onBudgetsUpdated }) => {
               <div className="budget-details">
                 <span>Amount: ${(parseFloat(budget.amount) || 0).toFixed(2)}</span>
               </div>
-              <button onClick={() => handleEditBudget(budget.id, newBudget)}>Edit</button>
+              <button onClick={() => handleStartEditing(budget)}>Edit</button>
               <button onClick={() => handleDeleteBudget(budget.id)}>Delete</button>
             </li>
           ))}

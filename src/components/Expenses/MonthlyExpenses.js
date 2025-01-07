@@ -43,28 +43,49 @@ const MonthlyExpenses = ({ currentMonth, budgets = [] }) => {
     return categoryClasses[category] || "";
   };
 
+  // Conditional Rendering
+  const showBudgetSummary = totalBudget > 0 || totalSpent > 0;
+
   return (
     <div className="monthly-expenses">
       <h2 className="monthly-expenses-title">Monthly Expenses Overview</h2>
-      <div className="budget-summary">
-        <p><strong>Total Budget:</strong> ${totalBudget > 0 ? totalBudget.toFixed(2) : "0.00"}</p>
-        <p><strong>Total Spent:</strong> ${totalSpent.toFixed(2)}</p>
-        <p>
-          <strong>Remaining:</strong> $
-          {totalBudget === 0 ? totalSpent.toFixed(2) : (totalBudget - totalSpent).toFixed(2)}
-        </p>
-      </div>
-      <div className="expenses-category">
-        <h3>Expenses by Category</h3>
-        <ul>
-          {Object.entries(expensesByCategory).map(([category, amount]) => (
-            <li key={category} className={getCategoryClass(category)}>
-              <span className="category-name">{category}</span>:
-              <span className="category-amount">${parseFloat(amount).toFixed(2)}</span>
-            </li>
-          ))}
-        </ul>
-      </div>
+
+      {/* Conditionally Render Budget Summary */}
+      {showBudgetSummary && (
+        <div className="budget-summary">
+          {totalBudget > 0 && (
+            <p>
+              <strong>Total Budget:</strong> ${totalBudget.toFixed(2)}
+            </p>
+          )}
+          <p>
+            <strong>Total Spent:</strong> ${totalSpent.toFixed(2)}
+          </p>
+          {totalBudget > 0 && (
+            <p>
+              <strong>Remaining:</strong> $
+              {(totalBudget - totalSpent).toFixed(2)}
+            </p>
+          )}
+        </div>
+      )}
+
+      {/* Conditionally Render Expenses by Category */}
+      {Object.keys(expensesByCategory).length > 0 && (
+        <div className="expenses-category">
+          <h3>Expenses by Category</h3>
+          <ul>
+            {Object.entries(expensesByCategory).map(([category, amount]) => (
+              <li key={category} className={getCategoryClass(category)}>
+                <span className="category-name">{category}</span>:
+                <span className="category-amount">
+                  ${parseFloat(amount).toFixed(2)}
+                </span>
+              </li>
+            ))}
+          </ul>
+        </div>
+      )}
     </div>
   );
 };

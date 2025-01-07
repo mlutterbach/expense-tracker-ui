@@ -14,6 +14,7 @@ const Login = () => {
       const response = await api.post("/signin", formData);
       localStorage.setItem("token", response.data.token);
       alert("Login successful! Redirect to dashboard.");
+      navigate("/expenses");
     } catch (err) {
       setError("Invalid email or password");
     }
@@ -36,16 +37,16 @@ const Login = () => {
             type="password"
             placeholder="Password"
             value={formData.password}
-            onChange={(e) =>
-              setFormData({ ...formData, password: e.target.value })
-            }
+            onChange={(e) => setFormData({ ...formData, password: e.target.value })}
             required
           />
-          <button type="submit">Login</button>
+          <button type="submit" className="primary-button">Login</button>
         </form>
         <p>
           Don't have an account?{" "}
-          <button onClick={() => navigate("/signup")}>Register Here</button>
+          <button onClick={() => navigate("/signup")} className="nav-button">
+            Register Here
+          </button>
         </p>
       </div>
     </div>

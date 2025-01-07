@@ -34,18 +34,14 @@ const Signup = () => {
             type="email"
             placeholder="Email"
             value={formData.email}
-            onChange={(e) =>
-              setFormData({ ...formData, email: e.target.value })
-            }
+            onChange={(e) => setFormData({ ...formData, email: e.target.value })}
             required
           />
           <input
             type="password"
             placeholder="Password"
             value={formData.password}
-            onChange={(e) =>
-              setFormData({ ...formData, password: e.target.value })
-            }
+            onChange={(e) => setFormData({ ...formData, password: e.target.value })}
             required
           />
           <input
@@ -60,7 +56,7 @@ const Signup = () => {
             }
             required
           />
-          <button type="submit">Sign Up</button>
+          <button type="submit" className="primary-button">Sign Up</button>
         </form>
       </div>
     </div>

@@ -43,7 +43,6 @@ const MonthlyExpenses = ({ currentMonth, budgets = [] }) => {
     return categoryClasses[category] || "";
   };
 
-  // Conditional Rendering
   const showBudgetSummary = totalBudget > 0 || totalSpent > 0;
 
   return (
@@ -70,7 +69,6 @@ const MonthlyExpenses = ({ currentMonth, budgets = [] }) => {
         </div>
       )}
 
-      {/* Conditionally Render Expenses by Category */}
       {Object.keys(expensesByCategory).length > 0 && (
         <div className="expenses-category">
           <h3>Expenses by Category</h3>

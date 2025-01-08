@@ -40,14 +40,13 @@ const ExpenseManager = () => {
   }, [currentMonth, fetchBudgets]);
 
   const handleMonthChange = (event) => {
-    setCurrentMonth(event.target.value); // Expecting a YYYY-MM format
+    setCurrentMonth(event.target.value);
   };
 
   return (
     <div className="expense-manager">
       <h1>Expense Tracker</h1>
 
-      {/* Unified Month Selector */}
       <div className="month-selector">
         <label htmlFor="month">Select Month:</label>
         <input

@@ -50,6 +50,12 @@ const ExpenseManager = () => {
     fetchBudgets();
   };
 
+  const handleRemoveFilter = (filterKey) => {
+    const updatedFilters = { ...filters };
+    delete updatedFilters[filterKey];
+    setFilters(updatedFilters);
+  };
+
   return (
     <div className="expense-manager">
       <h1>Expense Tracker</h1>
@@ -66,7 +72,12 @@ const ExpenseManager = () => {
 
       <ExpenseFilter onFilterChange={setFilters} />
       <ExpenseForm onExpenseAdded={handleExpenseAdded} />
-      <ExpenseList expenses={expenses} currentMonth={currentMonth} />
+      <ExpenseList
+        expenses={expenses}
+        currentMonth={currentMonth}
+        filters={filters}
+        onRemoveFilter={handleRemoveFilter}
+      />
       <BudgetManager currentMonth={currentMonth} onBudgetsUpdated={fetchBudgets} />
       <MonthlyExpenses currentMonth={currentMonth} budgets={budgets} />
     </div>

@@ -11,8 +11,9 @@ const ExpenseManager = () => {
   const [expenses, setExpenses] = useState([]);
   const [filters, setFilters] = useState({});
   const [budgets, setBudgets] = useState([]);
-  const [currentMonth, setCurrentMonth] = useState(new Date().toISOString().slice(0, 7)); // Default to current month
+  const [currentMonth, setCurrentMonth] = useState(new Date().toISOString().slice(0, 7));
 
+  // Fetch expenses
   const fetchExpenses = useCallback(async () => {
     try {
       const response = await api.get("/expenses", { params: { ...filters, month: currentMonth } });
@@ -22,6 +23,7 @@ const ExpenseManager = () => {
     }
   }, [currentMonth, filters]);
 
+  // Fetch budgets
   const fetchBudgets = useCallback(async () => {
     try {
       const response = await api.get("/budgets", { params: { month: currentMonth } });
@@ -43,6 +45,11 @@ const ExpenseManager = () => {
     setCurrentMonth(event.target.value);
   };
 
+  const handleExpenseAdded = () => {
+    fetchExpenses();
+    fetchBudgets();
+  };
+
   return (
     <div className="expense-manager">
       <h1>Expense Tracker</h1>
@@ -58,7 +65,7 @@ const ExpenseManager = () => {
       </div>
 
       <ExpenseFilter onFilterChange={setFilters} />
-      <ExpenseForm onExpenseAdded={fetchExpenses} />
+      <ExpenseForm onExpenseAdded={handleExpenseAdded} />
       <ExpenseList expenses={expenses} currentMonth={currentMonth} />
       <BudgetManager currentMonth={currentMonth} onBudgetsUpdated={fetchBudgets} />
       <MonthlyExpenses currentMonth={currentMonth} budgets={budgets} />

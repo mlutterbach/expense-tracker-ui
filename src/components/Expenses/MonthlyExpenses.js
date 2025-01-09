@@ -18,7 +18,7 @@ const MonthlyExpenses = ({ currentMonth, budgets = [] }) => {
 
   useEffect(() => {
     fetchMonthlyExpensesByCategory();
-  }, [fetchMonthlyExpensesByCategory]);
+  }, [currentMonth, budgets, fetchMonthlyExpensesByCategory]);
 
   const totalSpent = Object.values(expensesByCategory).reduce((sum, amount) => {
     const numericAmount = parseFloat(amount) || 0;
